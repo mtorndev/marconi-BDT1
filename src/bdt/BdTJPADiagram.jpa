@@ -49,7 +49,7 @@
     </jpa:c>
     <jpa:wsl>
         <jpa:ws n="Main" id="_15167799034552">
-            <i ref="_1510734870901" x="448" y="135"/>
+            <i ref="_1510734870901" x="145" y="59"/>
         </jpa:ws>
     </jpa:wsl>
 </jpa:entity-mappings>
