@@ -20,9 +20,10 @@ public class BDTTest {
    
     public static void main(String[] args) {
         
-        //PersonaDao personaDao = new PersonaDao();
-        DAO daoModel = new DAO();
-        PersonaDao personaDao = daoModel.getPersonaDao();
+        String PERSISTENCE_UNIT_NAME = "DEFAULT_PU";
+        EntityManager em;
+        em = Persistence.createEntityManagerFactory(PERSISTENCE_UNIT_NAME)
+                .createEntityManager();
         
         Persona persona1 = new Persona();
         Persona persona2 = new Persona();
@@ -31,11 +32,19 @@ public class BDTTest {
         persona2.setCognome("Verdi");
         persona2.setNome("Mauro");
         
-        personaDao.insertPersona(persona1);
-        personaDao.insertPersona(persona2);
-        
-        
-        List<Persona> personaList = personaDao.findAll();
+        // scrittura sul DB
+        em.getTransaction().begin();
+        em.persist(persona1); 
+        em.persist(persona2); 
+            // -- workaround cache entity manager
+        em.flush();
+        em.clear();   
+            // --
+        em.getTransaction().commit();
+            
+        // lettura dal DB
+        TypedQuery<Persona> typedQuery = em.createQuery("SELECT u FROM Persona u", Persona.class);
+        List<Persona> personaList = typedQuery.setMaxResults(10).getResultList(); 
         for (Persona p : personaList) {
             System.out.println(p.getCognome() + " - " + p.getNome());
         }
